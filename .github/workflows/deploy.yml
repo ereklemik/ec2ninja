@@ -1,0 +1,42 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Build and tag Docker image
+        run: |
+          docker build -t ec2ninja-app .
+          docker tag ec2ninja-app:latest ghcr.io/ereklemik/ec2ninja:latest
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.CR_PAT }}
+
+      - name: Push Docker image to GitHub Container Registry
+        run: docker push ghcr.io/ereklemik/ec2ninja:latest
+
+      - name: SSH into EC2 instance
+        uses: appleboy/ssh-action@master
+        with:
+          host: your-ec2-instance-ip
+          username: your-username
+          key: ${{ secrets.EC2_INSTANCE_PRIVATE_KEY }}
+          script: |
+            docker pull ghcr.io/ereklemik/ec2ninja:latest
+            docker stop ec2ninja-app || true
+            docker rm ec2ninja-app || true
+            docker run -d --name ec2ninja-app -p 80:80 ghcr.io/ereklemik/ec2ninja:latest
+
