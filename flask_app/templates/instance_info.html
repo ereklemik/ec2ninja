@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>EC2Ninja Flask App</title>
+</head>
+<body>
+    <h1>Instance Information</h1>
+    <table>
+        {% for key, value in instance_info.items() %}
+        <tr>
+            <td>{{ key }}</td>
+            <td>{{ value }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
