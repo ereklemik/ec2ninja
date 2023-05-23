@@ -38,5 +38,5 @@ jobs:
             docker pull ghcr.io/ereklemik/ec2ninja:latest
             docker stop ec2ninja-app || true
             docker rm ec2ninja-app || true
-            docker run -d --name ec2ninja-app -p 80:80 ghcr.io/ereklemik/ec2ninja:latest
+            docker run -d --name ec2ninja-app -p 80:5000 ghcr.io/ereklemik/ec2ninja:latest
 
