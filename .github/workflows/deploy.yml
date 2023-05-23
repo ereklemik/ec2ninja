@@ -31,8 +31,8 @@ jobs:
       - name: SSH into EC2 instance
         uses: appleboy/ssh-action@master
         with:
-          host: your-ec2-instance-ip
-          username: your-username
+          host: 3.122.191.170
+          username: ubuntu
           key: ${{ secrets.EC2_INSTANCE_PRIVATE_KEY }}
           script: |
             docker pull ghcr.io/ereklemik/ec2ninja:latest
